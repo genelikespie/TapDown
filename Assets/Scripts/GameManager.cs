@@ -7,10 +7,12 @@ public class GameManager : MonoBehaviour {
     TapGOPool tapAreaPool;
 
     TapPoint tapPoint;
+    EnemySpawner enemySpawner;
 
     GameObject enemyPrefab;
     GameObject tapAreaPrefab;
     GameObject tapPointPrefab;
+    GameObject enemySpawnerPrefab;
 
     const int enemyPoolAmount = 100;
     const int tapAreaPoolAmount = 100;
@@ -41,8 +43,9 @@ public class GameManager : MonoBehaviour {
         enemyPrefab = Resources.Load("enemyPrefab") as GameObject;
         tapAreaPrefab = Resources.Load("tapAreaPrefab") as GameObject;
         tapPointPrefab = Resources.Load("tapPointPrefab") as GameObject;
+        enemySpawnerPrefab = Resources.Load("enemySpawnerPrefab") as GameObject;
 
-        if (enemyPrefab == null || tapAreaPrefab == null || tapPointPrefab == null)
+        if (enemyPrefab == null || tapAreaPrefab == null || tapPointPrefab == null || enemySpawnerPrefab == null)
             Debug.LogError("prefab loading failed!");
 
         enemyPool = TapGOPoolSingleton<Enemy>.CreatePool(enemyPrefab, enemyPoolAmount);
@@ -60,6 +63,9 @@ public class GameManager : MonoBehaviour {
         tapPoint = (Instantiate(tapPointPrefab) as GameObject).GetComponent<TapPoint>();
         if (!tapPoint)
             Debug.LogError("creation of tap point object failed!");
+
+        enemySpawner = (Instantiate(enemySpawnerPrefab) as GameObject).GetComponent<EnemySpawner>();
+        if (!enemySpawner) Debug.LogError("creation of enemy spawner failed!");
     }
 	
 	// Update is called once per frame
