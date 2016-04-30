@@ -14,10 +14,11 @@ public class EnemySpawner : MonoBehaviour {
 	// Use this for initialization
     void Awake()
     {
+        target = GameManager.Instance().playerBase.transform;
         spawnPoints = new List<Transform>();
         activeEnemyPool = TapGOPoolSingleton<Enemy>.ActivePoolInstance();
         enemyPool = TapGOPoolSingleton<Enemy>.PoolInstance();
-        if (!activeEnemyPool || !enemyPool)
+        if (!activeEnemyPool || !enemyPool || !target)
             Debug.LogError("Cannot find activeEnemyPool!");
 
         foreach (Transform t in transform.GetComponentsInChildren<Transform>())

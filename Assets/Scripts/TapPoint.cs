@@ -46,7 +46,10 @@ public class TapPoint : MonoBehaviour {
                 // check if our tap position is within the range of any currently active tap areas
                 foreach (GameObject ta in activeTapAreaPool.activeObjectList)
                 {
-                    if ((ta.transform.position - tapPos).magnitude < TapArea.Radius)
+                    Vector3 difference = (ta.transform.position - tapPos);
+                    difference = new Vector3(difference.x, 0, difference.z);    // ignore the y axis!!
+                    float magnitude = difference.magnitude - Enemy.radius;      // account for the size of the enemy
+                    if (magnitude < TapArea.Radius)
                     {
                         return;
                     }

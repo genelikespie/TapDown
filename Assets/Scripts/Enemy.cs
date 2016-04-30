@@ -10,6 +10,8 @@ public class Enemy : TapGameObject {
     const float distanceToDrop = 10f;
     // time it takes for enemy to drop to 0
     const float timeToDrop = 1f;
+    // the approximation of the size of the enemy
+    public const float radius = 50f;
 
     Animator animator;
     Collider collider;
@@ -25,9 +27,20 @@ public class Enemy : TapGameObject {
     // TODO check for this in TapArea
     public bool doneSpawning { get; private set; }
 
+
+    bool rotateEnemy = false;
+    const float angularSpeed = 1f;
+    Vector3 newdir;
+    Vector3 olddir;
+    float step;                     // current angle we've rotated to
+
     public void SetDirection(Vector3 dir)
     {
-        // TODO implement
+        newdir = dir;
+        olddir = transform.forward;
+        rigidbody.velocity = Vector3.zero;
+        step = 0;
+        rotateEnemy = true;
         Debug.Log("new direction: " + dir);
     }
 
@@ -52,12 +65,26 @@ public class Enemy : TapGameObject {
     {
         Debug.Log("done spawning");
         if (target == null) Debug.LogError("target was not initialzed when enemy spawned!");
-        rigidbody.velocity = (target.position - transform.position).normalized * speed;
+        Vector3 diff = target.position - transform.position;
+        diff = new Vector3(diff.x, 0, diff.z);                  // ignore the y axis
+        SetDirection((diff).normalized );
         doneSpawning = true;
     }
 	// Update is called once per frame
 	void FixedUpdate () {
         // Drop the enemy from the sky!
+        if (rotateEnemy)
+        {
+            step += (angularSpeed * Time.deltaTime);
+            Vector3 currdir = Vector3.RotateTowards(olddir, newdir, step, 0.0F);
+            transform.rotation = Quaternion.LookRotation(currdir);
+            Debug.Log(currdir + "  forward: " + transform.forward);
+            if (transform.forward == newdir)
+            {
+                rigidbody.velocity = newdir * speed;
+                rotateEnemy = false;
+            }
+        }
 
 	}
     protected void OnEnable()

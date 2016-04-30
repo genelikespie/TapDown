@@ -17,6 +17,8 @@ public class GameManager : MonoBehaviour {
     const int enemyPoolAmount = 100;
     const int tapAreaPoolAmount = 100;
 
+    public Base playerBase;
+
     private static GameManager instance;
     private static Object instance_lock = new Object();
     public static GameManager Instance()
@@ -51,7 +53,7 @@ public class GameManager : MonoBehaviour {
         enemyPool = TapGOPoolSingleton<Enemy>.CreatePool(enemyPrefab, enemyPoolAmount);
         tapAreaPool = TapGOPoolSingleton<TapArea>.CreatePool(tapAreaPrefab, tapAreaPoolAmount);
 
-        if (enemyPool == null || tapAreaPool == null)
+        if (enemyPool == null || tapAreaPool == null || !playerBase)
             Debug.LogError("GameObjectPool creation failed!");
 	}
 
