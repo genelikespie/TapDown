@@ -10,6 +10,13 @@ public class TapArea : TapGameObject {
 
     public const float Radius = 16f;
 
+    //Material change functions
+    public Material material1;
+    public Material material2;
+    public Renderer rend;
+
+    float lerp;
+
     //time functions to remove the TapArea
     public float timeLengthTapArea = 3f;
     public float timeLeftTapArea = 0f;
@@ -24,7 +31,10 @@ public class TapArea : TapGameObject {
     void OnEnable()
     {
         // call our base class's method
+
         base.OnEnable();
+
+        float lerp = Mathf.PingPong(Time.time, timeLengthTapArea) / timeLengthTapArea;
 
         // Activate timer to kill Tap Area
         alreadyActive = true;
@@ -46,11 +56,14 @@ public class TapArea : TapGameObject {
         if (alreadyActive == true)
         {
             timeLeftTapArea += Time.deltaTime;
+            if(timeLengthTapArea/2 <= timeLeftTapArea)
+            this.gameObject.GetComponent<MeshRenderer>().material = material2;
             //reset and remove the TapArea
             if (timeLengthTapArea <= timeLeftTapArea)
             {
                 alreadyActive = false;
                 timeLeftTapArea = 0f;
+                rend.material = material1;
                 this.gameObject.SetActive(false);
             }
         }
@@ -58,13 +71,14 @@ public class TapArea : TapGameObject {
 
 
 
-
 	// Use this for initialization
 	void Awake () {
+
+
         activeEnemyPool = TapGOPoolSingleton<Enemy>.ActivePoolInstance();
         if (!activeEnemyPool)
             Debug.LogError("Could not find active enemy pool!");
-
+                rend = this.GetComponent<Renderer>();
         transform.localScale = new Vector3(Radius*2, Radius*2, Radius*2);
 	}
 }
