@@ -16,6 +16,7 @@ public class Enemy : TapGameObject {
     Animator animator;
     Collider collider;
     Rigidbody rigidbody;
+    ParticleSystem particleSystem;
 
     const float initialSpeed = 5f;
     public float speed { get; private set; }
@@ -49,6 +50,9 @@ public class Enemy : TapGameObject {
         animator = GetComponent<Animator>();
         collider = GetComponent<Collider>();
         rigidbody = GetComponent<Rigidbody>();
+        particleSystem = GetComponentInChildren<ParticleSystem>();
+        if (!particleSystem)
+            Debug.LogError("no particle system found!");
         rigidbody.useGravity = false;
         transform.localScale = new Vector3(radius*2, radius*2, radius*2);
     }
@@ -93,9 +97,11 @@ public class Enemy : TapGameObject {
         base.OnEnable();
         speed = initialSpeed;
         animator.Play("Drop");
+        particleSystem.Play();
     }
     protected void OnDisable()
     {
+        particleSystem.Play();
         doneSpawning = false;
         base.OnDisable();
     }

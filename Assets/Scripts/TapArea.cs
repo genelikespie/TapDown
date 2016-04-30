@@ -46,7 +46,7 @@ public class TapArea : TapGameObject {
         {
             Vector3 difference = (obj.transform.position - transform.position);
             difference = new Vector3(difference.x, 0, difference.z);
-            Debug.Log(difference + " mag: " + difference.magnitude);
+            //Debug.Log(difference + " mag: " + difference.magnitude);
             if ((difference).magnitude - Enemy.radius < radius)
             {
                 // since the enemy is in our radius, make the enemy move in another direction
