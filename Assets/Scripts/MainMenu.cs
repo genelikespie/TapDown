@@ -38,6 +38,8 @@ public class MainMenu : MonoBehaviour {
 	
 	}
 
+    //Have a timer to display how long you have survived
+    //first in seconds format 0.00 and then minutes:seconds format 00:00
     void FixedUpdate()
     {
         float minutes = Mathf.Floor(Timer / 60);
@@ -46,10 +48,16 @@ public class MainMenu : MonoBehaviour {
         if (TimerActive == true)
         {
             Timer += Time.deltaTime;
-           if (minutes >= 1f)
-            TimerText.text = minutes + ":" + Mathf.RoundToInt(seconds);
-           else
-            TimerText.text = (seconds).ToString("F2");
+            if (minutes >= 1f)
+            {
+                if (seconds > 9.49)
+                    TimerText.text = minutes + ":" + Mathf.RoundToInt(seconds);
+                else
+                    TimerText.text = minutes + ":0" + Mathf.RoundToInt(seconds);
+
+            }
+            else
+                TimerText.text = (seconds).ToString("F2");
         }
     }
 
