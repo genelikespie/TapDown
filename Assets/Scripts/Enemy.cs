@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(Animator))]
-[RequireComponent(typeof(Collider2D))]
+[RequireComponent(typeof(Collider))]
 public class Enemy : TapGameObject {
 
     // distance above from where the enemy spawns
@@ -12,8 +12,8 @@ public class Enemy : TapGameObject {
     const float timeToDrop = 1f;
 
     Animator animator;
-    Collider2D collider;
-    Rigidbody2D rigidbody;
+    Collider collider;
+    Rigidbody rigidbody;
 
     const float initialSpeed = 5f;
     public float speed { get; private set; }
@@ -34,9 +34,9 @@ public class Enemy : TapGameObject {
     void Awake () {
         doneSpawning = false;
         animator = GetComponent<Animator>();
-        collider = GetComponent<Collider2D>();
-        rigidbody = GetComponent<Rigidbody2D>();
-        rigidbody.gravityScale = 0;
+        collider = GetComponent<Collider>();
+        rigidbody = GetComponent<Rigidbody>();
+        rigidbody.useGravity = false;
     }
 	// Use this for initialization
 	void Start () {
@@ -50,6 +50,7 @@ public class Enemy : TapGameObject {
     /// </summary>
     public void DoneSpawning ()
     {
+        Debug.Log("done spawning");
         if (target == null) Debug.LogError("target was not initialzed when enemy spawned!");
         rigidbody.velocity = (target.position - transform.position).normalized * speed;
         doneSpawning = true;
