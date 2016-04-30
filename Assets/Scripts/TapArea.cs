@@ -24,6 +24,7 @@ public class TapArea : TapGameObject {
     public float timeLengthTapArea = 3f;
     public float timeLeftTapArea = 0f;
     bool alreadyActive = false;
+    bool MoveUp = false;
     
     private ActiveTapGOPool activeEnemyPool;
 
@@ -40,7 +41,7 @@ public class TapArea : TapGameObject {
 
         // Activate timer to kill Tap Area
         alreadyActive = true;
-
+        MoveUp = true;
         foreach (GameObject obj in activeEnemyPool.activeObjectList)
         {
             if ((obj.transform.position - transform.position).magnitude < Radius)
@@ -58,18 +59,27 @@ public class TapArea : TapGameObject {
         if (alreadyActive == true)
         {
             timeLeftTapArea += Time.deltaTime;
-            
-            this.rend.material.color = Color.Lerp(red, grey, timeLeftTapArea/timeLengthTapArea);
-            //    if (timeLengthTapArea/2 <= timeLeftTapArea)
-            //    this.gameObject.GetComponent<MeshRenderer>().material = material2;
-            //reset and remove the TapArea
 
+            // this.rend.material.color = Color.Lerp(red, grey, timeLeftTapArea/timeLengthTapArea);
+            if (timeLengthTapArea / 2 <= timeLeftTapArea)
+            {
+                //if changing color from red -> gray
+                if (MoveUp == true)
+                {
+                    float moveY = (transform.position.y - .05f);
+                    transform.position = new Vector3(this.transform.position.x, moveY, this.transform.position.z);
+                    this.gameObject.GetComponent<MeshRenderer>().material = material2;
+                    MoveUp = false;
+                }
+            }
+            //reset and remove the TapArea
             if (timeLengthTapArea <= timeLeftTapArea)
             {
                 alreadyActive = false;
                 timeLeftTapArea = 0f;
                 rend.material = material1;
                 this.gameObject.SetActive(false);
+                MoveUp = false;
             }
         }
     }
