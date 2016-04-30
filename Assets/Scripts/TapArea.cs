@@ -69,7 +69,7 @@ public class TapArea : TapGameObject {
                 //if changing color from red -> gray
                 if (MoveUp == true)
                 {
-                    float moveY = (transform.position.y - .05f);
+                    float moveY = (transform.position.y - .02f);
                     transform.position = new Vector3(this.transform.position.x, moveY, this.transform.position.z);
                     this.gameObject.GetComponent<MeshRenderer>().material = material2;
                     MoveUp = false;
