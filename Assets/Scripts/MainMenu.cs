@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class mainMenu : MonoBehaviour {
+public class MainMenu : MonoBehaviour {
 
     Button StartButton;
     Button ExitButton;

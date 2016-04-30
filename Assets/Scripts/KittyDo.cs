@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class kittyDo : MonoBehaviour {
+public class KittyDo : MonoBehaviour {
 
     Animator kittyAnimator;
 
