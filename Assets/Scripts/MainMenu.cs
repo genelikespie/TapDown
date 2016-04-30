@@ -9,6 +9,8 @@ public class MainMenu : MonoBehaviour {
     Text TimerText;
     Text Title;
 
+    GameManager gameManager;
+
     //Timer functions
     float Timer = 0;
     bool TimerActive = false;
@@ -20,6 +22,8 @@ public class MainMenu : MonoBehaviour {
         StartButton = this.transform.Find("Start").GetComponent<Button>();
         ExitButton = this.transform.Find("Exit").GetComponent<Button>();
         Title = this.transform.Find("Title").GetComponent<Text>();
+        gameManager = GameManager.Instance();
+        if (!gameManager) Debug.LogError("cannot find gamemanager!");
 
     }
 
@@ -76,6 +80,7 @@ public class MainMenu : MonoBehaviour {
     {
         TurnOff();
         OnTimer();
+        gameManager.BeginGame();
 
     }
 

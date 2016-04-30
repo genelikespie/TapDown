@@ -7,7 +7,7 @@ using System.Collections;
 public class TapPoint : MonoBehaviour {
 
     // The height that tap areas are set to
-    const float tapAreaHeight = 1.1f;
+    const float tapAreaHeight = 2.1f;
 
     // the pool that holds info on all active TapAreas
     ActiveTapGOPool activeTapAreaPool;

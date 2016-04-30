@@ -15,6 +15,27 @@ public class GameManager : MonoBehaviour {
     const int enemyPoolAmount = 100;
     const int tapAreaPoolAmount = 100;
 
+    private static GameManager instance;
+    private static Object instance_lock = new Object();
+    public static GameManager Instance()
+    {
+        if (instance != null)
+            return instance;
+        lock (instance_lock)
+        {
+            instance = (GameManager)FindObjectOfType(typeof(GameManager));
+            if (FindObjectsOfType(typeof(GameManager)).Length > 1)
+            {
+                Debug.LogError("There can only be one instance!");
+                return instance;
+            }
+            if (instance != null)
+                return instance;
+            Debug.LogError("Could not find a instance!");
+            return null;
+        }
+    }
+
 	// Use this for initialization
 	void Awake () {
         enemyPrefab = Resources.Load("enemyPrefab") as GameObject;
@@ -31,7 +52,10 @@ public class GameManager : MonoBehaviour {
             Debug.LogError("GameObjectPool creation failed!");
 	}
 
-    void Start()
+    /// <summary>
+    /// Starts the game, selected from the Start button from mainmenu
+    /// </summary>
+    public void BeginGame()
     {
         tapPoint = (Instantiate(tapPointPrefab) as GameObject).GetComponent<TapPoint>();
         if (!tapPoint)

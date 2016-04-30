@@ -8,7 +8,7 @@ using System.Collections;
 /// </summary>
 public class TapArea : TapGameObject {
 
-    public const float Radius = 2f;
+    public const float Radius = 16f;
     
     private ActiveTapGOPool activeEnemyPool;
 
