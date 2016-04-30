@@ -37,7 +37,7 @@ public class TapPoint : MonoBehaviour {
             Vector3 tapPos = Vector3.zero;
             if (Physics.Raycast(tapRay, out hit))
             {
-                Debug.Log(hit.transform.tag);
+                //Debug.Log(hit.transform.tag);
                 // make sure the the ray hit the ground, if not, then the tap doesn't count
                 if (hit.transform.tag != "Ground")
                     return;
@@ -48,16 +48,16 @@ public class TapPoint : MonoBehaviour {
                 {
                     Vector3 difference = (ta.transform.position - tapPos);
                     difference = new Vector3(difference.x, 0, difference.z);    // ignore the y axis!!
-                    float magnitude = difference.magnitude - Enemy.radius;      // account for the size of the enemy
-                    if (magnitude < TapArea.Radius)
+                    float magnitude = difference.magnitude;      // account for the size of the enemy
+                    if (magnitude < TapArea.radius)
                     {
+                        Debug.Log("Cannot add area, already area in place");
                         return;
                     }
                 }
             }
             else
                 return;
-            Debug.Log("fire");
             // we are not in range of any tap areas
             // set a fresh tap area and make it appear on the place
             TapArea freshTapArea = tapAreaPool.GetObject().GetComponent<TapArea>();

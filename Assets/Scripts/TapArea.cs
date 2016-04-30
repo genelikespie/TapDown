@@ -8,7 +8,7 @@ using System.Collections;
 /// </summary>
 public class TapArea : TapGameObject {
 
-    public const float Radius = 16f;
+    public const float radius = 16f;
 
     //Material change functions
     public Material material1;
@@ -44,11 +44,14 @@ public class TapArea : TapGameObject {
         MoveUp = true;
         foreach (GameObject obj in activeEnemyPool.activeObjectList)
         {
-            if ((obj.transform.position - transform.position).magnitude < Radius)
+            Vector3 difference = (obj.transform.position - transform.position);
+            difference = new Vector3(difference.x, 0, difference.z);
+            Debug.Log(difference + " mag: " + difference.magnitude);
+            if ((difference).magnitude < radius)
             {
                 // since the enemy is in our radius, make the enemy move in another direction
-                Vector3 direction = (obj.transform.position - transform.position).normalized;
-                obj.GetComponent<Enemy>().SetDirection(direction);
+                difference = difference.normalized;
+                obj.GetComponent<Enemy>().SetDirection(difference);
             }
         }
     }
@@ -96,6 +99,6 @@ public class TapArea : TapGameObject {
                 rend = this.GetComponent<Renderer>();
         red = material1.color;
         grey = material2.color;
-    transform.localScale = new Vector3(Radius*2, Radius*2, Radius*2);
+    transform.localScale = new Vector3(radius*2, radius*2, radius*2);
 	}
 }

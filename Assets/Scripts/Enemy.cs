@@ -11,7 +11,7 @@ public class Enemy : TapGameObject {
     // time it takes for enemy to drop to 0
     const float timeToDrop = 1f;
     // the approximation of the size of the enemy
-    public const float radius = 50f;
+    public const float radius = 2.5f;
 
     Animator animator;
     Collider collider;
@@ -41,7 +41,7 @@ public class Enemy : TapGameObject {
         rigidbody.velocity = Vector3.zero;
         step = 0;
         rotateEnemy = true;
-        Debug.Log("new direction: " + dir);
+        Debug.Log("new difference: " + dir);
     }
 
     void Awake () {
@@ -50,6 +50,7 @@ public class Enemy : TapGameObject {
         collider = GetComponent<Collider>();
         rigidbody = GetComponent<Rigidbody>();
         rigidbody.useGravity = false;
+        transform.localScale = new Vector3(radius*2, radius*2, radius*2);
     }
 	// Use this for initialization
 	void Start () {
@@ -63,7 +64,7 @@ public class Enemy : TapGameObject {
     /// </summary>
     public void DoneSpawning ()
     {
-        Debug.Log("done spawning");
+        //Debug.Log("done spawning");
         if (target == null) Debug.LogError("target was not initialzed when enemy spawned!");
         Vector3 diff = target.position - transform.position;
         diff = new Vector3(diff.x, 0, diff.z);                  // ignore the y axis
@@ -78,7 +79,7 @@ public class Enemy : TapGameObject {
             step += (angularSpeed * Time.deltaTime);
             Vector3 currdir = Vector3.RotateTowards(olddir, newdir, step, 0.0F);
             transform.rotation = Quaternion.LookRotation(currdir);
-            Debug.Log(currdir + "  forward: " + transform.forward);
+            //Debug.Log(currdir + "  forward: " + transform.forward);
             if (transform.forward == newdir)
             {
                 rigidbody.velocity = newdir * speed;
