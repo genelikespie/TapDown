@@ -9,6 +9,11 @@ using System.Collections;
 public class TapArea : TapGameObject {
 
     public const float Radius = 16f;
+
+    //time functions to remove the TapArea
+    public float timeLengthTapArea = 3f;
+    public float timeLeftTapArea = 0f;
+    bool alreadyActive = false;
     
     private ActiveTapGOPool activeEnemyPool;
 
@@ -21,6 +26,9 @@ public class TapArea : TapGameObject {
         // call our base class's method
         base.OnEnable();
 
+        // Activate timer to kill Tap Area
+        alreadyActive = true;
+
         foreach (GameObject obj in activeEnemyPool.activeObjectList)
         {
             if ((obj.transform.position - transform.position).magnitude < Radius)
@@ -31,6 +39,26 @@ public class TapArea : TapGameObject {
             }
         }
     }
+
+    //Use to remove the tap area and make it disappear.
+    void FixedUpdate()
+    {
+        if (alreadyActive == true)
+        {
+            timeLeftTapArea += Time.deltaTime;
+            //reset and remove the TapArea
+            if (timeLengthTapArea <= timeLeftTapArea)
+            {
+                alreadyActive = false;
+                timeLeftTapArea = 0f;
+                this.gameObject.SetActive(false);
+            }
+        }
+    }
+
+
+
+
 	// Use this for initialization
 	void Awake () {
         activeEnemyPool = TapGOPoolSingleton<Enemy>.ActivePoolInstance();
