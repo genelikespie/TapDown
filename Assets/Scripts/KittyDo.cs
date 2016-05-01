@@ -4,11 +4,11 @@ using System.Collections;
 public class KittyDo : MonoBehaviour {
 
     Animator kittyAnimator;
-
-	// Use this for initialization
+    //AnimationState jumpAnimationState;
+    // Use this for initialization
 	void Start () {
        kittyAnimator = this.GetComponent<Animator>();
-        
+       
 	}
 	
 	// Update is called once per frame
@@ -38,5 +38,11 @@ public class KittyDo : MonoBehaviour {
     public void DoIdle()
     {
         kittyAnimator.SetInteger("Status", 0);
+    }
+
+    public void DoJump(float speed)
+    {
+        kittyAnimator.SetFloat("JumpSpeed", speed);
+        kittyAnimator.SetInteger("Status", 3);
     }
 }

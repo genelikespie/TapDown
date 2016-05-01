@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 
 public class MainMenu : MonoBehaviour {
 
@@ -8,6 +9,11 @@ public class MainMenu : MonoBehaviour {
     Button ExitButton;
     Text TimerText;
     Text Title;
+    Text Score;
+    Text GameOverText;
+    Transform healthMeter;
+
+    public List<Image> healthImages;
 
     GameManager gameManager;
 
@@ -17,14 +23,30 @@ public class MainMenu : MonoBehaviour {
 
     void Awake()
     {
+        healthImages = new List<Image>();
+        Score = this.transform.Find("Score").GetComponent<Text>();
+        Score.gameObject.SetActive(false);
+
+        healthMeter = this.transform.Find("HealthMeter").GetComponent<Transform>();
+        healthMeter.gameObject.SetActive(false);
+
         TimerText = this.transform.Find("Timer").GetComponent<Text>();
         TimerText.gameObject.SetActive(false);
+
         StartButton = this.transform.Find("Start").GetComponent<Button>();
         ExitButton = this.transform.Find("Exit").GetComponent<Button>();
         Title = this.transform.Find("Title").GetComponent<Text>();
+        GameOverText = this.transform.Find("GameOverText").GetComponent<Text>();
         gameManager = GameManager.Instance();
         if (!gameManager) Debug.LogError("cannot find gamemanager!");
 
+        GameOverText.gameObject.SetActive(false);
+
+        foreach (Image i in healthMeter.GetComponentsInChildren<Image>(true))
+        {
+            healthImages.Add(i);
+            i.gameObject.SetActive(false);
+        }
     }
 
 	// Use this for initialization
@@ -66,6 +88,9 @@ public class MainMenu : MonoBehaviour {
         StartButton.gameObject.SetActive(false);
         ExitButton.gameObject.SetActive(false);
         Title.gameObject.SetActive(false);
+        Score.gameObject.SetActive(false);
+        healthMeter.gameObject.SetActive(false);
+        GameOverText.gameObject.SetActive(false);
     }
 
     public void TurnOn()
@@ -73,13 +98,15 @@ public class MainMenu : MonoBehaviour {
         StartButton.gameObject.SetActive(true);
         ExitButton.gameObject.SetActive(true);
         Title.gameObject.SetActive(true);
+        Score.gameObject.SetActive(true);
+        healthMeter.gameObject.SetActive(true);
     }
 
 
     public void ExitPress()
     {
-        //   Application.Quit();
         TurnOff();
+        Application.Quit();
         Debug.Log("Exit Pressed");
 
     }
@@ -88,10 +115,35 @@ public class MainMenu : MonoBehaviour {
     {
         TurnOff();
         OnTimer();
-        gameManager.BeginGame();
+        Score.gameObject.SetActive(true);
+        healthMeter.gameObject.SetActive(true);
+        gameManager.BeginGame(this);
 
     }
 
+    // disables a health image according to the current health value
+    public void DecHealthMeter(int h, bool b)
+    {
+        healthImages[h].gameObject.SetActive(!b);
+    }
+
+    // sets the health meter to health value
+    public void SetHealthMeter(int h)
+    {
+        if (h <= 0 || h > healthImages.Count)
+        {
+            Debug.LogError("health is negative!");
+            return;
+        }
+        for (int i = 0; i < h; i++)
+        {
+            healthImages[h].gameObject.SetActive(true);
+        }
+    }
+    public void UpdateScore(int s)
+    {
+        Score.text = s.ToString();
+    }
     //turns on timer
     public void OnTimer()
     {
@@ -112,4 +164,11 @@ public class MainMenu : MonoBehaviour {
         Timer = 0f;
     }
 
+    public void GameOver()
+    {
+        TurnOff();
+        GameOverText.text = "Your Score: " + Score.text;
+        GameOverText.gameObject.SetActive(true);
+        ExitButton.gameObject.SetActive(true);
+    }
 }
