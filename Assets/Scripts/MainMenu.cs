@@ -7,10 +7,14 @@ public class MainMenu : MonoBehaviour {
 
     Button StartButton;
     Button ExitButton;
+    Button CreditsButton;
+    Button BackButton;
+
     Text TimerText;
     Text Title;
     Text Score;
     Text GameOverText;
+    Text CreditsText;
     Transform healthMeter;
 
     public List<Image> healthImages;
@@ -23,6 +27,13 @@ public class MainMenu : MonoBehaviour {
 
     void Awake()
     {
+        CreditsButton = this.transform.Find("CreditsButton").GetComponent<Button>();
+        BackButton = this.transform.Find("BackButton").GetComponent<Button>();
+        BackButton.gameObject.SetActive(false);
+
+        CreditsText = this.transform.Find("CreditsText").GetComponent<Text>();
+        CreditsText.gameObject.SetActive(false);
+
         healthImages = new List<Image>();
         Score = this.transform.Find("Score").GetComponent<Text>();
         Score.gameObject.SetActive(false);
@@ -87,10 +98,39 @@ public class MainMenu : MonoBehaviour {
     {
         StartButton.gameObject.SetActive(false);
         ExitButton.gameObject.SetActive(false);
+        CreditsButton.gameObject.SetActive(false);
+        BackButton.gameObject.SetActive(false);
+        CreditsText.gameObject.SetActive(false);
+
         Title.gameObject.SetActive(false);
         Score.gameObject.SetActive(false);
         healthMeter.gameObject.SetActive(false);
         GameOverText.gameObject.SetActive(false);
+
+    }
+
+    public void ResetMenu()
+    {
+        StartButton.gameObject.SetActive(true);
+        ExitButton.gameObject.SetActive(true);
+        CreditsButton.gameObject.SetActive(true);
+        Title.gameObject.SetActive(true);
+
+        CreditsText.gameObject.SetActive(false);
+        BackButton.gameObject.SetActive(false);
+        Score.gameObject.SetActive(false);
+        healthMeter.gameObject.SetActive(false);
+        GameOverText.gameObject.SetActive(false);
+        
+        OffTimer();
+    }
+
+    public void ShowCredits()
+    {
+        TurnOff();
+        CreditsText.gameObject.SetActive(true);
+        BackButton.gameObject.SetActive(true);
+        Title.gameObject.SetActive(true);
     }
 
     public void TurnOn()
