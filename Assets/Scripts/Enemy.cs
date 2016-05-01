@@ -38,12 +38,15 @@ public class Enemy : TapGameObject {
 
     public void SetDirection(Vector3 dir)
     {
-        newdir = dir;
-        olddir = transform.forward;
-        rigidbody.velocity = Vector3.zero;
-        step = 0;
-        rotateEnemy = true;
-        Debug.Log("new difference: " + dir);
+        if (rotateEnemy == false)
+        {
+            newdir = dir;
+            olddir = transform.forward;
+            rigidbody.velocity = Vector3.zero;
+            step = 0;
+            rotateEnemy = true;
+            Debug.Log("new difference: " + dir);
+        }
     }
 
     void Awake () {
@@ -90,6 +93,8 @@ public class Enemy : TapGameObject {
             {
                 rigidbody.velocity = newdir * speed;
                 rotateEnemy = false;
+                speed = speed * 1.25f;
+
             }
         }
 
@@ -108,11 +113,12 @@ public class Enemy : TapGameObject {
         base.OnDisable();
     }
 
+
     void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Base")
         {
-            //Remove Health
+            this.gameObject.SetActive(false);
         }
 
         if (other.gameObject.tag == "Wall")
@@ -130,7 +136,38 @@ public class Enemy : TapGameObject {
         }
 
 
-
+        if (other.gameObject.tag == "Killzone")
+        {
+            this.gameObject.SetActive(false);
         }
+
+
+        //swtich the forward vectors on the colliding enemies
+        if (other.gameObject.tag == "Enemy")
+        {
+            if (!rotateEnemy)
+            {
+                print("dome");
+                Vector3 myVelocity = (this.transform.forward);
+                Vector3 tempVelocity = myVelocity;
+                Vector3 otherVelocity = (other.transform.forward);
+
+                myVelocity = otherVelocity;
+                otherVelocity = tempVelocity;
+
+                myVelocity = new Vector3(myVelocity.x, 0, myVelocity.z);
+                myVelocity = myVelocity.normalized;
+                this.SetDirection(myVelocity);
+
+                otherVelocity = new Vector3(otherVelocity.x, 0, otherVelocity.z);
+                otherVelocity = otherVelocity.normalized;
+                other.GetComponent<Enemy>().SetDirection(otherVelocity);
+
+            }
+        }
+
+
+
+    }
 
 }
