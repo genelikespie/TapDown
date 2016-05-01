@@ -143,7 +143,7 @@ public class GameManager : MonoBehaviour {
     }
     void GameOver()
     {
-        mainMenu.GameOver();
+        mainMenu.GameOver(score);
         StopGame();
     }
 }

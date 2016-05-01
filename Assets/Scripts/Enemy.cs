@@ -56,7 +56,6 @@ public class Enemy : TapGameObject {
 
             KittyDo kitty = GetComponent<KittyDo>();
             angularSpeed = (Vector3.AngleBetween(newdir, olddir) / jumpSpeed);
-            kitty.DoJump(1f);
             //Debug.Log("new difference: " + dir);
         }
 

@@ -213,11 +213,11 @@ public class MainMenu : MonoBehaviour {
         Timer = 0f;
     }
 
-    public void GameOver()
+    public void GameOver(float killScore)
     {
         TurnOff();
         OffTimer();
-        GameOverText.text = "Your Score: " + Score.text;
+        GameOverText.text = "Hits: " + Score.text + "    Time: " + TimerText.text + "\nTotal Score: " + (killScore + Timer/5f).ToString("f2");
         GameOverText.gameObject.SetActive(true);
         ResetButton.gameObject.SetActive(true);
     }
