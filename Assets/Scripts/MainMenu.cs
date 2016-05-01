@@ -10,6 +10,15 @@ public class MainMenu : MonoBehaviour {
     Button CreditsButton;
     Button BackButton;
     Button ResetButton;
+    Button GoBackModeButton;
+    Button GoBackSurvivalButton;
+    Button SurvivalButton;
+    Button EasyButton;
+
+    Button MediumButton;
+    Button HardButton;
+    Button CustomizeButton;
+    Button StoryButton;
 
     Text TimerText;
     Text Title;
@@ -47,6 +56,32 @@ public class MainMenu : MonoBehaviour {
 
         TimerText = this.transform.Find("Timer").GetComponent<Text>();
         TimerText.gameObject.SetActive(false);
+
+
+        GoBackModeButton = this.transform.Find("GoBackGameModes").GetComponent<Button>();
+        GoBackModeButton.gameObject.SetActive(false);
+
+        SurvivalButton = this.transform.Find("Survival").GetComponent<Button>();
+         SurvivalButton.gameObject.SetActive(false);
+
+         GoBackSurvivalButton = this.transform.Find("GoBackSurvival").GetComponent<Button>();
+         GoBackSurvivalButton.gameObject.SetActive(false);
+
+         EasyButton = this.transform.Find("Easy").GetComponent<Button>();
+         EasyButton.gameObject.SetActive(false);
+
+         MediumButton = this.transform.Find("Medium").GetComponent<Button>();
+         MediumButton.gameObject.SetActive(false);
+
+         HardButton = this.transform.Find("Hard").GetComponent<Button>();
+         HardButton.gameObject.SetActive(false);
+
+         CustomizeButton = this.transform.Find("Customize").GetComponent<Button>();
+         CustomizeButton.gameObject.SetActive(false);
+
+         StoryButton = this.transform.Find("Story").GetComponent<Button>();
+         StoryButton.gameObject.SetActive(false);
+
 
         StartButton = this.transform.Find("Start").GetComponent<Button>();
         ExitButton = this.transform.Find("Exit").GetComponent<Button>();
@@ -112,6 +147,15 @@ public class MainMenu : MonoBehaviour {
         healthMeter.gameObject.SetActive(false);
         GameOverText.gameObject.SetActive(false);
 
+
+        EasyButton.gameObject.SetActive(false);
+        MediumButton.gameObject.SetActive(false);
+        HardButton.gameObject.SetActive(false);
+        GoBackSurvivalButton.gameObject.SetActive(false);
+        SurvivalButton.gameObject.SetActive(false);
+        CustomizeButton.gameObject.SetActive(false);
+        StoryButton.gameObject.SetActive(false);
+        GoBackModeButton.gameObject.SetActive(false);
     }
 
     public void ResetMenu()
@@ -130,6 +174,10 @@ public class MainMenu : MonoBehaviour {
         Score.gameObject.SetActive(false);
         healthMeter.gameObject.SetActive(false);
         GameOverText.gameObject.SetActive(false);
+        SurvivalButton.gameObject.SetActive(false);
+        CustomizeButton.gameObject.SetActive(false);
+        StoryButton.gameObject.SetActive(false);
+        GoBackModeButton.gameObject.SetActive(false);
         ResetTimer();
         OffTimer();
     }
@@ -159,14 +207,54 @@ public class MainMenu : MonoBehaviour {
 
     }
 
-    public void HitPlay()
+    public void HitPlay(int difficulty)
     {
         TurnOff();
         OnTimer();
+        gameManager.SetDifficulty(difficulty);
         Score.gameObject.SetActive(true);
         healthMeter.gameObject.SetActive(true);
         gameManager.BeginGame(this);
 
+    }
+
+    public void GameOptionsOn()
+    {
+        SurvivalButton.gameObject.SetActive(true);
+        CustomizeButton.gameObject.SetActive(true);
+        StoryButton.gameObject.SetActive(true);
+        GoBackModeButton.gameObject.SetActive(true);
+    }
+
+    public void GameOptionsOff()
+    {
+        SurvivalButton.gameObject.SetActive(false);
+        CustomizeButton.gameObject.SetActive(false);
+        StoryButton.gameObject.SetActive(false);
+        GoBackModeButton.gameObject.SetActive(false);
+    }
+
+    public void GameSurvivalDifficultyOn()
+    {
+        EasyButton.gameObject.SetActive(true);
+        MediumButton.gameObject.SetActive(true);
+        HardButton.gameObject.SetActive(true);
+        GoBackSurvivalButton.gameObject.SetActive(true);
+
+    }
+
+    public void GameSurvivalDifficultyOff()
+    {
+        EasyButton.gameObject.SetActive(false);
+        MediumButton.gameObject.SetActive(false);
+        HardButton.gameObject.SetActive(false);
+        GoBackSurvivalButton.gameObject.SetActive(false);
+    }
+
+    public void HitStart()
+    {
+        TurnOff();
+        GameOptionsOn();
     }
 
     // disables a health image according to the current health value
