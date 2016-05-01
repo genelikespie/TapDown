@@ -11,7 +11,7 @@ public class EnemySpawner : MonoBehaviour {
 
     // placeholder for target transform, replace this with dynamic implementation
     public Transform target;
-    const float timeBetweenSpawns = .5f;
+    public float timeBetweenSpawns = 1f;
 
     float nexttime = 0;
     float currtime = 0;
