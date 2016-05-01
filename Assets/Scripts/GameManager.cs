@@ -51,26 +51,27 @@ public class GameManager : MonoBehaviour {
     }
 
 	// Use this for initialization
-	void Awake () {
+    void Awake()
+    {
         enemyPrefab = Resources.Load("enemyPrefab") as GameObject;
         tapAreaPrefab = Resources.Load("tapAreaPrefab") as GameObject;
         tapPointPrefab = Resources.Load("tapPointPrefab") as GameObject;
         enemySpawnerPrefab = Resources.Load("enemySpawnerPrefab") as GameObject;
         catParticlePrefab = Resources.Load("catParticlePrefab") as GameObject;
+        carActivate = GameObject.Find("carholder");
 
+        if (carActivate == null)
+            Debug.LogError("Add carholder");
         if (enemyPrefab == null || tapAreaPrefab == null || tapPointPrefab == null || enemySpawnerPrefab == null || !catParticlePrefab)
             Debug.LogError("prefab loading failed!");
-
+    }
+    void Start()
+    {
         enemyPool = TapGOPoolSingleton<Enemy>.CreatePool(enemyPrefab, enemyPoolAmount);
         tapAreaPool = TapGOPoolSingleton<TapArea>.CreatePool(tapAreaPrefab, tapAreaPoolAmount);
         catParticlePool = TapGOPoolSingleton<CatParticle>.CreatePool(catParticlePrefab, catParticlePoolAmount);
         if (enemyPool == null || tapAreaPool == null || !playerBase || !catParticlePool)
             Debug.LogError("GameObjectPool creation failed!");
-
-        if (GameObject.Find("carholder") == null)
-            Debug.LogError("Add carholder");
-
-        carActivate = GameObject.Find("carholder");
     }
 
     /// <summary>

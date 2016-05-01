@@ -9,9 +9,11 @@ public class AudioManager : MonoBehaviour {
     private static AudioManager instance;
     private static Object instance_lock = new Object();
 
-    void Awake()
+    void Awake ()
     {
         audioSources = new Dictionary<string, AudioSource>();
+        if (audioSources != null)
+            Debug.Log("created new audiosources dict");
         foreach (AudioSource a in GetComponentsInChildren<AudioSource>())
         {
             audioSources.Add(a.name, a);
@@ -39,7 +41,10 @@ public class AudioManager : MonoBehaviour {
 
     public AudioSource GetAudioSource(string name)
     {
-        AudioSource a = null;
+        AudioSource a;
+        if (audioSources == null)
+            Debug.LogError("Audio sources null");
+
         if (!audioSources.TryGetValue(name, out a))
         {
             Debug.LogError("Could not find audiosource: " + name);

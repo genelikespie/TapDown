@@ -62,8 +62,8 @@ public class Enemy : TapGameObject {
     }
 
     void Awake () {
-
-        popSound = AudioManager.Instance().GetAudioSource("PopSound");
+        AudioManager audioManager = AudioManager.Instance();
+        popSound = audioManager.GetAudioSource("PopSound");
         gameManager = GameManager.Instance();
         doneSpawning = false;
         animator = GetComponent<Animator>();
