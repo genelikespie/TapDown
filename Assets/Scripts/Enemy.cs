@@ -127,6 +127,7 @@ public class Enemy : TapGameObject {
             particle.SetActive(true);
             particle.GetComponent<CatParticle>().PlayAtLocation(transform.position);
             gameManager.IncScore(1);
+            popSound.Play();
         }
         doneSpawning = false;
         base.OnDisable();
