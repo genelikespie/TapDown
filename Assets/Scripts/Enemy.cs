@@ -13,12 +13,15 @@ public class Enemy : TapGameObject {
     // the approximation of the size of the enemy
     public const float radius = 2.5f;
 
+    AudioSource popSound;
     Animator animator;
     Collider collider;
     Rigidbody rigidbody;
-    ParticleSystem particleSystem;
+    GameManager gameManager;
 
     const float initialSpeed = 5f;
+    const float maxSpeed = 15f;
+
     public float speed { get; private set; }
     // The initial target of our enemy, passed by the enemyspawner
     // This is only used as the initial velocity at spawn and 
@@ -41,6 +44,10 @@ public class Enemy : TapGameObject {
     {
         if (rotateEnemy == false)
         {
+            speed = speed * 1.25f;
+            if (speed >= maxSpeed)
+                speed = maxSpeed;
+
             newdir = dir;
             olddir = transform.forward;
             rigidbody.velocity = Vector3.zero;
@@ -48,25 +55,23 @@ public class Enemy : TapGameObject {
             rotateEnemy = true;
 
             KittyDo kitty = GetComponent<KittyDo>();
-            //kitty.DoJump();
-            // time of animation = 0.667
-            // time of jump = angle / angularspeed
             angularSpeed = (Vector3.AngleBetween(newdir, olddir) / jumpSpeed);
             kitty.DoJump(1f);
-            Debug.Log("new difference: " + dir);
+            //Debug.Log("new difference: " + dir);
         }
 
     }
 
     void Awake () {
 
+        popSound = AudioManager.Instance().GetAudioSource("PopSound");
+        gameManager = GameManager.Instance();
         doneSpawning = false;
         animator = GetComponent<Animator>();
         collider = GetComponent<Collider>();
         rigidbody = GetComponent<Rigidbody>();
-        particleSystem = GetComponentInChildren<ParticleSystem>();
-        if (!particleSystem)
-            Debug.LogError("no particle system found!");
+        if (!gameManager)
+            Debug.LogError("no gameManager found!");
         rigidbody.useGravity = false;
         transform.localScale = new Vector3(radius*2, radius*2, radius*2);
     }
@@ -102,7 +107,6 @@ public class Enemy : TapGameObject {
             {
                 rigidbody.velocity = newdir * speed;
                 rotateEnemy = false;
-                speed = speed * 1.25f;
 
             }
         }
@@ -113,11 +117,17 @@ public class Enemy : TapGameObject {
         base.OnEnable();
         speed = initialSpeed;
         animator.Play("drop");
-        particleSystem.Play();
     }
     protected void OnDisable()
     {
-        particleSystem.Play();
+        if (doneSpawning)
+        {
+            rigidbody.velocity = Vector3.zero;
+            GameObject particle = gameManager.catParticlePool.GetObject();
+            particle.SetActive(true);
+            particle.GetComponent<CatParticle>().PlayAtLocation(transform.position);
+            gameManager.IncScore(1);
+        }
         doneSpawning = false;
         base.OnDisable();
     }
@@ -127,6 +137,7 @@ public class Enemy : TapGameObject {
     {
         if (other.gameObject.tag == "Base")
         {
+            gameManager.DecHealth(1);
             this.gameObject.SetActive(false);
         }
 

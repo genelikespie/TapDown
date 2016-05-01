@@ -5,6 +5,7 @@ public class GameManager : MonoBehaviour {
 
     TapGOPool enemyPool;
     TapGOPool tapAreaPool;
+    public TapGOPool catParticlePool;
 
     TapPoint tapPoint;
     EnemySpawner enemySpawner;
@@ -12,13 +13,16 @@ public class GameManager : MonoBehaviour {
     GameObject tapAreaPrefab;
     GameObject tapPointPrefab;
     GameObject enemySpawnerPrefab;
+    GameObject catParticlePrefab;
 
     public int score {get; private set;}
     MainMenu mainMenu;
 
-    const int enemyPoolAmount = 100;
-    const int tapAreaPoolAmount = 100;
-    const int maxHealth = 1;
+    const int enemyPoolAmount = 160;
+    const int tapAreaPoolAmount = 160;
+    const int catParticlePoolAmount = 80;
+
+    const int maxHealth = 3;
     int health;
 
     public Base playerBase;
@@ -51,14 +55,15 @@ public class GameManager : MonoBehaviour {
         tapAreaPrefab = Resources.Load("tapAreaPrefab") as GameObject;
         tapPointPrefab = Resources.Load("tapPointPrefab") as GameObject;
         enemySpawnerPrefab = Resources.Load("enemySpawnerPrefab") as GameObject;
+        catParticlePrefab = Resources.Load("catParticlePrefab") as GameObject;
 
-        if (enemyPrefab == null || tapAreaPrefab == null || tapPointPrefab == null || enemySpawnerPrefab == null)
+        if (enemyPrefab == null || tapAreaPrefab == null || tapPointPrefab == null || enemySpawnerPrefab == null || !catParticlePrefab)
             Debug.LogError("prefab loading failed!");
 
         enemyPool = TapGOPoolSingleton<Enemy>.CreatePool(enemyPrefab, enemyPoolAmount);
         tapAreaPool = TapGOPoolSingleton<TapArea>.CreatePool(tapAreaPrefab, tapAreaPoolAmount);
-
-        if (enemyPool == null || tapAreaPool == null || !playerBase)
+        catParticlePool = TapGOPoolSingleton<CatParticle>.CreatePool(catParticlePrefab, catParticlePoolAmount);
+        if (enemyPool == null || tapAreaPool == null || !playerBase || !catParticlePool)
             Debug.LogError("GameObjectPool creation failed!");
 
         if (GameObject.Find("carholder") == null)
@@ -85,7 +90,25 @@ public class GameManager : MonoBehaviour {
 
         carActivate.GetComponent<AllCars>().callingAllcars();
     }
-	
+
+    public void StopGame()
+    {
+        foreach (GameObject o in enemyPool.objectList) {
+            if (o.activeSelf)
+                o.SetActive(false);
+        }
+        foreach (GameObject o in tapAreaPool.objectList)
+        {
+            if(o.activeSelf)
+                o.SetActive(false);
+        }
+        if (tapPoint)
+            GameObject.Destroy(tapPoint.gameObject);
+        if(enemySpawner)
+            GameObject.Destroy(enemySpawner.gameObject);
+
+    }
+
 	// Update is called once per frame
 	void Update () {
 	
@@ -108,6 +131,7 @@ public class GameManager : MonoBehaviour {
     }
     void GameOver()
     {
+        StopGame();
         mainMenu.GameOver();
     }
 }

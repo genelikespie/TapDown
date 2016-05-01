@@ -10,10 +10,12 @@ public class TapPoint : MonoBehaviour {
     const float tapAreaHeight = 2.1f;
 
     // the pool that holds info on all active TapAreas
+    AudioSource tapAreaSound;
     ActiveTapGOPool activeTapAreaPool;
     TapGOPool tapAreaPool;
 	// Use this for initialization
 	void Awake () {
+        tapAreaSound = AudioManager.Instance().GetAudioSource("TapAreaSound");
         activeTapAreaPool = TapGOPoolSingleton<TapArea>.ActivePoolInstance();
         tapAreaPool = TapGOPoolSingleton<TapArea>.PoolInstance();
 
@@ -70,7 +72,7 @@ public class TapPoint : MonoBehaviour {
             }
             freshTapArea.transform.position = tapPos;
             freshTapArea.gameObject.SetActive(true);
-
+            tapAreaSound.Play();
         }
 	}
 }

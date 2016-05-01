@@ -9,6 +9,7 @@ public class MainMenu : MonoBehaviour {
     Button ExitButton;
     Button CreditsButton;
     Button BackButton;
+    Button ResetButton;
 
     Text TimerText;
     Text Title;
@@ -28,6 +29,9 @@ public class MainMenu : MonoBehaviour {
     void Awake()
     {
         CreditsButton = this.transform.Find("CreditsButton").GetComponent<Button>();
+        ResetButton = this.transform.Find("ResetButton").GetComponent<Button>();
+        ResetButton.gameObject.SetActive(false);
+
         BackButton = this.transform.Find("BackButton").GetComponent<Button>();
         BackButton.gameObject.SetActive(false);
 
@@ -101,6 +105,7 @@ public class MainMenu : MonoBehaviour {
         CreditsButton.gameObject.SetActive(false);
         BackButton.gameObject.SetActive(false);
         CreditsText.gameObject.SetActive(false);
+        ResetButton.gameObject.SetActive(false);
 
         Title.gameObject.SetActive(false);
         Score.gameObject.SetActive(false);
@@ -111,17 +116,21 @@ public class MainMenu : MonoBehaviour {
 
     public void ResetMenu()
     {
+        Score.text = "0";
+        TimerText.text = "0";
+
         StartButton.gameObject.SetActive(true);
         ExitButton.gameObject.SetActive(true);
         CreditsButton.gameObject.SetActive(true);
         Title.gameObject.SetActive(true);
 
+        ResetButton.gameObject.SetActive(false);
         CreditsText.gameObject.SetActive(false);
         BackButton.gameObject.SetActive(false);
         Score.gameObject.SetActive(false);
         healthMeter.gameObject.SetActive(false);
         GameOverText.gameObject.SetActive(false);
-        
+        ResetTimer();
         OffTimer();
     }
 
@@ -141,8 +150,7 @@ public class MainMenu : MonoBehaviour {
         Score.gameObject.SetActive(true);
         healthMeter.gameObject.SetActive(true);
     }
-
-
+    
     public void ExitPress()
     {
         TurnOff();
@@ -177,7 +185,7 @@ public class MainMenu : MonoBehaviour {
         }
         for (int i = 0; i < h; i++)
         {
-            healthImages[h].gameObject.SetActive(true);
+            healthImages[i].gameObject.SetActive(true);
         }
     }
     public void UpdateScore(int s)
@@ -200,6 +208,7 @@ public class MainMenu : MonoBehaviour {
     public void ResetTimer()
     {
         TimerActive = false;
+        TimerText.text = "0";
         TimerText.gameObject.SetActive(false);
         Timer = 0f;
     }
@@ -209,6 +218,6 @@ public class MainMenu : MonoBehaviour {
         TurnOff();
         GameOverText.text = "Your Score: " + Score.text;
         GameOverText.gameObject.SetActive(true);
-        ExitButton.gameObject.SetActive(true);
+        ResetButton.gameObject.SetActive(true);
     }
 }
