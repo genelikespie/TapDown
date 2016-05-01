@@ -9,10 +9,10 @@ using System.Collections.Generic;
 /// </summary>
 public class ActiveTapGOPool : MonoBehaviour {
 
-    public List<GameObject> activeObjectList;
+    public List<TapGameObject> activeObjectList;
 
     void Awake()
     {
-        activeObjectList = new List<GameObject>();
+        activeObjectList = new List<TapGameObject>();
     }
 }

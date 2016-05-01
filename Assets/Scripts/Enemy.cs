@@ -48,7 +48,7 @@ public class Enemy : TapGameObject {
             if (speed >= maxSpeed)
                 speed = maxSpeed;
 
-            newdir = dir;
+            newdir = new Vector3(dir.x, 0, dir.z);
             olddir = transform.forward;
             rigidbody.velocity = Vector3.zero;
             step = 0;
@@ -103,7 +103,7 @@ public class Enemy : TapGameObject {
             Vector3 currdir = Vector3.RotateTowards(olddir, newdir, step, 0.0F);
             transform.rotation = Quaternion.LookRotation(currdir);
             //Debug.Log(currdir + "  forward: " + transform.forward);
-            if (transform.forward == newdir)
+            if ((transform.forward - newdir).magnitude < 0.01f)
             {
                 rigidbody.velocity = newdir * speed;
                 rotateEnemy = false;
@@ -123,9 +123,14 @@ public class Enemy : TapGameObject {
         if (doneSpawning)
         {
             rigidbody.velocity = Vector3.zero;
-            GameObject particle = gameManager.catParticlePool.GetObject();
-            particle.SetActive(true);
-            particle.GetComponent<CatParticle>().PlayAtLocation(transform.position);
+            TapGameObject particle = gameManager.catParticlePool.GetObject();
+            if (particle)
+            {
+                particle.gameObject.SetActive(true);
+                particle.GetComponent<CatParticle>().PlayAtLocation(transform.position);
+            }
+            else
+                Debug.LogError("Could not play particle system");
             gameManager.IncScore(1);
             popSound.Play();
         }

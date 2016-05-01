@@ -94,14 +94,15 @@ public class GameManager : MonoBehaviour {
 
     public void StopGame()
     {
-        foreach (GameObject o in enemyPool.objectList) {
-            if (o.activeSelf)
-                o.SetActive(false);
-        }
-        foreach (GameObject o in tapAreaPool.objectList)
+        foreach (TapGameObject o in enemyPool.objectList)
         {
-            if(o.activeSelf)
-                o.SetActive(false);
+            if (o.gameObject.activeSelf)
+                o.gameObject.SetActive(false);
+        }
+        foreach (TapGameObject o in tapAreaPool.objectList)
+        {
+            if (o.gameObject.activeSelf)
+                o.gameObject.SetActive(false);
         }
         if (tapPoint)
             GameObject.Destroy(tapPoint.gameObject);
@@ -142,7 +143,7 @@ public class GameManager : MonoBehaviour {
     }
     void GameOver()
     {
-        StopGame();
         mainMenu.GameOver();
+        StopGame();
     }
 }

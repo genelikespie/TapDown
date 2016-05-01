@@ -216,6 +216,7 @@ public class MainMenu : MonoBehaviour {
     public void GameOver()
     {
         TurnOff();
+        OffTimer();
         GameOverText.text = "Your Score: " + Score.text;
         GameOverText.gameObject.SetActive(true);
         ResetButton.gameObject.SetActive(true);

@@ -35,7 +35,7 @@ public class TapGameObject : MonoBehaviour {
         if (initialized)
         {
             taken = true;
-            activePool.activeObjectList.Add(this.gameObject);
+            activePool.activeObjectList.Add(this);
         }
         // register this object with the activetapobjectpool
     }
@@ -44,7 +44,7 @@ public class TapGameObject : MonoBehaviour {
     {
         if (initialized)
         {
-            if (!activePool.activeObjectList.Remove(this.gameObject))
+            if (!activePool.activeObjectList.Remove(this))
                 Debug.LogError("Failed to remove object from active object list");
             // if active, 
             //   remove this object from activetapobjectpool

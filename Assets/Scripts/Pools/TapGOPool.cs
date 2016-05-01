@@ -13,12 +13,12 @@ using System.Collections.Generic;
 /// <typeparam name="Template"></typeparam>
 public class TapGOPool : MonoBehaviour
 {
-    public List<GameObject> objectList;
+    public List<TapGameObject> objectList;
     static private Object _lock;
     void Awake()
     {
         _lock = new Object();
-        objectList = new List<GameObject>();
+        objectList = new List<TapGameObject>();
     }
 
     /// <summary>
@@ -26,15 +26,15 @@ public class TapGOPool : MonoBehaviour
     /// Returns null if all objects are currently active
     /// </summary>
     /// <returns></returns>
-    public GameObject GetObject()
+    public TapGameObject GetObject()
     {
         lock (_lock)
         {
-            foreach (GameObject obj in objectList)
+            foreach (TapGameObject obj in objectList)
             {
-                if (obj.activeSelf == false && !obj.GetComponent<TapGameObject>().taken)
+                if (obj.gameObject.activeSelf == false && !obj.taken)
                 {
-                    obj.GetComponent<TapGameObject>().taken = true;
+                    obj.taken = true;
                     return obj;
                 }
             }

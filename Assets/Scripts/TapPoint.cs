@@ -46,14 +46,14 @@ public class TapPoint : MonoBehaviour {
                 tapPos = hit.point;
                 tapPos = new Vector3(tapPos.x, tapAreaHeight, tapPos.z);
                 // check if our tap position is within the range of any currently active tap areas
-                foreach (GameObject ta in activeTapAreaPool.activeObjectList)
+                foreach (TapGameObject ta in activeTapAreaPool.activeObjectList)
                 {
                     Vector3 difference = (ta.transform.position - tapPos);
                     difference = new Vector3(difference.x, 0, difference.z);    // ignore the y axis!!
                     float magnitude = difference.magnitude;      // account for the size of the enemy
                     if (magnitude < TapArea.radius)
                     {
-                        Debug.Log("Cannot add area, already area in place");
+                        //Debug.Log("Cannot add area, already area in place");
                         return;
                     }
                 }

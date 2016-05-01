@@ -30,6 +30,7 @@ public class EnemySpawner : MonoBehaviour {
             if (t.tag == "Spawner")
                 spawnPoints.Add(t);
         }
+        currtime = 0f;
         nexttime = timeBetweenSpawns;
     }
 	void Start () {
@@ -37,9 +38,9 @@ public class EnemySpawner : MonoBehaviour {
 	}
     void FixedUpdate()
     {
-        if (currtime > nexttime)
+        if (currtime >= nexttime)
         {
-            nexttime = Time.time + timeBetweenSpawns;
+            nexttime = currtime + timeBetweenSpawns;
             SpawnEnemy();
         }
         currtime += Time.deltaTime;

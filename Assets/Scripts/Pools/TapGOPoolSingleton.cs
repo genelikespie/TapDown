@@ -83,12 +83,14 @@ public class TapGOPoolSingleton<Template> : MonoBehaviour where Template : TapGa
         // add our objects to the pool
         for (int i = 0; i < amount; i++)
         {
-            GameObject prefab = Instantiate(templatePrefab) as GameObject;
+            TapGameObject prefab = (Instantiate(templatePrefab) as GameObject).GetComponent<TapGameObject>();
+            if (!prefab)
+                Debug.LogError("Not a TapGameObject!");
             prefab.gameObject.SetActive(false);                                             // initially set object to be inactive
             prefab.transform.SetParent(poolInstance.transform);                             // set the created prefab to be a child of the pool object for cleanliness
             // initialize the activepool for the object 
             // (we do this after setting it to active to make sure we don't call the OneEnable and OnDisable functions)
-            prefab.GetComponent<TapGameObject>().activeTapGOPool = activePoolInstance;      
+            prefab.activeTapGOPool = activePoolInstance;      
             poolInstance.objectList.Add(prefab);
         }
         return poolInstance;

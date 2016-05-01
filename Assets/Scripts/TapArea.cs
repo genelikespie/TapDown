@@ -42,7 +42,7 @@ public class TapArea : TapGameObject {
         // Activate timer to kill Tap Area
         alreadyActive = true;
         MoveUp = true;
-        foreach (GameObject obj in activeEnemyPool.activeObjectList)
+        foreach (TapGameObject obj in activeEnemyPool.activeObjectList)
         {
             Vector3 difference = (obj.transform.position - transform.position);
             difference = new Vector3(difference.x, 0, difference.z);
