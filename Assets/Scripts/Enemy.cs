@@ -35,6 +35,7 @@ public class Enemy : TapGameObject {
     Vector3 olddir;
     float step;                     // current angle we've rotated to
 
+
     public void SetDirection(Vector3 dir)
     {
         newdir = dir;
@@ -46,6 +47,7 @@ public class Enemy : TapGameObject {
     }
 
     void Awake () {
+
         doneSpawning = false;
         animator = GetComponent<Animator>();
         collider = GetComponent<Collider>();
@@ -105,4 +107,30 @@ public class Enemy : TapGameObject {
         doneSpawning = false;
         base.OnDisable();
     }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Base")
+        {
+            //Remove Health
+        }
+
+        if (other.gameObject.tag == "Wall")
+        {
+            if (!rotateEnemy)
+            {
+
+                Vector3 vVelocity = -(this.rigidbody.velocity);
+                Vector3 fVelocity = (other.transform.forward);
+                Vector3 endDirection = vVelocity - 2 * (Vector3.Dot(vVelocity, fVelocity)) * fVelocity;
+                endDirection = new Vector3(endDirection.x, 0, endDirection.z);
+                endDirection = endDirection.normalized;
+                this.SetDirection(endDirection);
+            }
+        }
+
+
+
+        }
+
 }
