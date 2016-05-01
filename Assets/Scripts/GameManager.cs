@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour {
     int health;
 
     public Base playerBase;
+    public GameObject carActivate;
 
     private static GameManager instance;
     private static Object instance_lock = new Object();
@@ -59,7 +60,12 @@ public class GameManager : MonoBehaviour {
 
         if (enemyPool == null || tapAreaPool == null || !playerBase)
             Debug.LogError("GameObjectPool creation failed!");
-	}
+
+        if (GameObject.Find("carholder") == null)
+            Debug.LogError("Add carholder");
+
+        carActivate = GameObject.Find("carholder");
+    }
 
     /// <summary>
     /// Starts the game, selected from the Start button from mainmenu
@@ -76,6 +82,8 @@ public class GameManager : MonoBehaviour {
 
         enemySpawner = (Instantiate(enemySpawnerPrefab) as GameObject).GetComponent<EnemySpawner>();
         if (!enemySpawner) Debug.LogError("creation of enemy spawner failed!");
+
+        carActivate.GetComponent<AllCars>().callingAllcars();
     }
 	
 	// Update is called once per frame
