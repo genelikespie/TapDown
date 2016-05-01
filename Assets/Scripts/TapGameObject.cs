@@ -7,6 +7,13 @@ public class TapGameObject : MonoBehaviour {
     // so we can remove from it when destroyed
     // and add to it when enabled
     private ActiveTapGOPool activePool;
+
+    // Set if the object was handed out by the pool
+    public bool taken = false;
+
+    // MUST BE SET after setting activeTapOPool
+    private bool initialized = false;
+
     public ActiveTapGOPool activeTapGOPool
     {
         get
@@ -21,14 +28,13 @@ public class TapGameObject : MonoBehaviour {
         }
     }
 
-    // MUST BE SET after setting activeTapOPool
-    private bool initialized = false;
 	// Use this for initialization
 
     protected void OnEnable ()
     {
         if (initialized)
         {
+            taken = true;
             activePool.activeObjectList.Add(this.gameObject);
         }
         // register this object with the activetapobjectpool
@@ -46,5 +52,6 @@ public class TapGameObject : MonoBehaviour {
             //   throw error/exception
             // sets this object to be inactive
         }
+        taken = false;
     }
 }

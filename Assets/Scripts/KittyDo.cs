@@ -6,9 +6,10 @@ public class KittyDo : MonoBehaviour {
     Animator kittyAnimator;
     //AnimationState jumpAnimationState;
     // Use this for initialization
-	void Start () {
+	void Awake () {
        kittyAnimator = this.GetComponent<Animator>();
-       
+       if (!kittyAnimator)
+           Debug.LogError("Animator not found!");
 	}
 	
 	// Update is called once per frame

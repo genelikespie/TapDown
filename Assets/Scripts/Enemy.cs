@@ -147,7 +147,7 @@ public class Enemy : TapGameObject {
             if (!rotateEnemy)
             {
 
-                Vector3 vVelocity = -(this.rigidbody.velocity);
+                Vector3 vVelocity = -(transform.forward);
                 Vector3 fVelocity = (other.transform.forward);
                 Vector3 endDirection = vVelocity - 2 * (Vector3.Dot(vVelocity, fVelocity)) * fVelocity;
                 endDirection = new Vector3(endDirection.x, 0, endDirection.z);
@@ -168,7 +168,7 @@ public class Enemy : TapGameObject {
         {
             if (!rotateEnemy)
             {
-                print("dome");
+                //print("dome");
                 Vector3 myVelocity = (this.transform.forward);
                 Vector3 tempVelocity = myVelocity;
                 Vector3 otherVelocity = (other.transform.forward);

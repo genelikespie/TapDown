@@ -11,6 +11,10 @@ public class EnemySpawner : MonoBehaviour {
 
     // placeholder for target transform, replace this with dynamic implementation
     public Transform target;
+    const float timeBetweenSpawns = .5f;
+
+    float nexttime = 0;
+    float currtime = 0;
 	// Use this for initialization
     void Awake()
     {
@@ -26,23 +30,28 @@ public class EnemySpawner : MonoBehaviour {
             if (t.tag == "Spawner")
                 spawnPoints.Add(t);
         }
+        nexttime = timeBetweenSpawns;
     }
 	void Start () {
 	
 	}
-	
-	// Update is called once per frame
-	void Update () {
-        if (Input.GetKeyDown(KeyCode.S)) {
-            int i = (int)(Random.value * (spawnPoints.Count - 1));
-            Enemy enemy = enemyPool.GetObject().GetComponent<Enemy>();
-            if (!enemy) Debug.LogError("enemy not found");
-            enemy.transform.position = spawnPoints[i].position;
-            enemy.transform.rotation = spawnPoints[i].rotation;
-
-            // set enemy target
-            enemy.target = target;
-            enemy.gameObject.SetActive(true);
+    void FixedUpdate()
+    {
+        if (currtime > nexttime)
+        {
+            nexttime = Time.time + timeBetweenSpawns;
+            SpawnEnemy();
         }
-	}
+        currtime += Time.deltaTime;
+    }
+    public void SpawnEnemy()
+    {
+        int i = (int)(Random.value * (spawnPoints.Count - 1));
+        Enemy enemy = enemyPool.GetObject().GetComponent<Enemy>();
+        if (!enemy) Debug.LogError("enemy not found");
+        enemy.transform.position = spawnPoints[i].position;
+        enemy.transform.rotation = spawnPoints[i].rotation;
+        enemy.target = target;
+        enemy.gameObject.SetActive(true);
+    }
 }

@@ -14,8 +14,10 @@ using System.Collections.Generic;
 public class TapGOPool : MonoBehaviour
 {
     public List<GameObject> objectList;
+    static private Object _lock;
     void Awake()
     {
+        _lock = new Object();
         objectList = new List<GameObject>();
     }
 
@@ -26,12 +28,18 @@ public class TapGOPool : MonoBehaviour
     /// <returns></returns>
     public GameObject GetObject()
     {
-        foreach (GameObject obj in objectList)
+        lock (_lock)
         {
-            if (obj.activeSelf == false)
-                return obj;
+            foreach (GameObject obj in objectList)
+            {
+                if (obj.activeSelf == false && !obj.GetComponent<TapGameObject>().taken)
+                {
+                    obj.GetComponent<TapGameObject>().taken = true;
+                    return obj;
+                }
+            }
+            Debug.LogError("All objects in pool are active!");
+            return null;
         }
-        Debug.LogError("All objects in pool are active!");
-        return null;
     }
 }

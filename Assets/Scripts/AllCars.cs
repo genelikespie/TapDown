@@ -1,20 +1,28 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class AllCars : MonoBehaviour {
 
-    public GameObject[] Cars;
+    public List<GameObject> Cars;
 
     // Use this for initialization
 
     void Awake()
     {
-        Cars = GameObject.FindGameObjectsWithTag("Killzone");
+        Cars = new List<GameObject>();
+        IEnumerable listOfChildren = transform.GetComponentsInChildren<Transform>();
+        foreach (Transform i in listOfChildren)
+        {
+            if (i.tag == "Killzone")
+            {
+                Cars.Add(i.gameObject);
+            }
+        }
     }
 
     void Start () {
-
-            
+   
 
     }
 

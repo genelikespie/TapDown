@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour {
 
     const int maxHealth = 3;
     int health;
+    public static bool godMode = false;
 
     public Base playerBase;
     public GameObject carActivate;
@@ -111,11 +112,21 @@ public class GameManager : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-	
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            if (enemySpawner)
+                enemySpawner.SpawnEnemy();
+        }
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            godMode = !godMode;
+        }
 	}
 
     public void DecHealth(int amount)
     {
+        if (godMode)
+            return;
         health -= amount;
         if (health <= 0)
         {
