@@ -30,7 +30,8 @@ public class Enemy : TapGameObject {
 
 
     bool rotateEnemy = false;
-    const float angularSpeed = 1f;
+    float angularSpeed = 1f;
+    float jumpSpeed = 0.667f;
     Vector3 newdir;
     Vector3 olddir;
     float step;                     // current angle we've rotated to
@@ -45,8 +46,16 @@ public class Enemy : TapGameObject {
             rigidbody.velocity = Vector3.zero;
             step = 0;
             rotateEnemy = true;
+
+            KittyDo kitty = GetComponent<KittyDo>();
+            //kitty.DoJump();
+            // time of animation = 0.667
+            // time of jump = angle / angularspeed
+            angularSpeed = (Vector3.AngleBetween(newdir, olddir) / jumpSpeed);
+            kitty.DoJump(1f);
             Debug.Log("new difference: " + dir);
         }
+
     }
 
     void Awake () {
@@ -103,7 +112,7 @@ public class Enemy : TapGameObject {
     {
         base.OnEnable();
         speed = initialSpeed;
-        animator.Play("Drop");
+        animator.Play("drop");
         particleSystem.Play();
     }
     protected void OnDisable()

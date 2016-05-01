@@ -8,14 +8,18 @@ public class GameManager : MonoBehaviour {
 
     TapPoint tapPoint;
     EnemySpawner enemySpawner;
-
     GameObject enemyPrefab;
     GameObject tapAreaPrefab;
     GameObject tapPointPrefab;
     GameObject enemySpawnerPrefab;
 
+    public int score {get; private set;}
+    MainMenu mainMenu;
+
     const int enemyPoolAmount = 100;
     const int tapAreaPoolAmount = 100;
+    const int maxHealth = 1;
+    int health;
 
     public Base playerBase;
 
@@ -60,8 +64,12 @@ public class GameManager : MonoBehaviour {
     /// <summary>
     /// Starts the game, selected from the Start button from mainmenu
     /// </summary>
-    public void BeginGame()
+    public void BeginGame(MainMenu m)
     {
+        mainMenu = m;
+        score = 0;
+        health = maxHealth;
+        mainMenu.SetHealthMeter(health);
         tapPoint = (Instantiate(tapPointPrefab) as GameObject).GetComponent<TapPoint>();
         if (!tapPoint)
             Debug.LogError("creation of tap point object failed!");
@@ -74,4 +82,24 @@ public class GameManager : MonoBehaviour {
 	void Update () {
 	
 	}
+
+    public void DecHealth(int amount)
+    {
+        health -= amount;
+        if (health <= 0)
+        {
+            GameOver();
+        }
+        mainMenu.DecHealthMeter(health,true);
+    }
+
+    public void IncScore(int s)
+    {
+        score += s;
+        mainMenu.UpdateScore(score);
+    }
+    void GameOver()
+    {
+        mainMenu.GameOver();
+    }
 }
