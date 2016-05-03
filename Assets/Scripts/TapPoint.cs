@@ -6,6 +6,16 @@ using System.Collections;
  */
 public class TapPoint : MonoBehaviour {
 
+    //Feedback to change color for not touchable objects and change it back to the color that  it was.
+    Color tappedColor;
+    Transform changeThisColor;
+    IEnumerator redNotTouch(float waitTime, Transform changeMe)
+    {
+        yield return new WaitForSeconds(waitTime);
+        changeMe.GetComponent<Renderer>().material.color = tappedColor;
+    }
+
+
     // The height that tap areas are set to
     const float tapAreaHeight = 2.1f;
 
@@ -42,7 +52,17 @@ public class TapPoint : MonoBehaviour {
                 //Debug.Log(hit.transform.tag);
                 // make sure the the ray hit the ground, if not, then the tap doesn't count
                 if (hit.transform.tag != "Ground")
+                {
+                    //make sure it has a renderer and that its not red already
+                    if (hit.transform.GetComponent<Renderer>() != null && hit.transform.GetComponent<Renderer>().material.color != Color.red)
+                    {
+                        tappedColor = hit.transform.GetComponent<Renderer>().material.color;
+                        hit.transform.GetComponent<Renderer>().material.color = Color.red;
+                        StartCoroutine(redNotTouch(2f, hit.transform));
+                    }
                     return;
+
+                }
                 tapPos = hit.point;
                 tapPos = new Vector3(tapPos.x, tapAreaHeight, tapPos.z);
                 // check if our tap position is within the range of any currently active tap areas
