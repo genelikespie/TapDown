@@ -28,7 +28,7 @@ public class KittyEnemy : Enemy {
     void FixedUpdate()
     {
         base.FixedUpdate();
-
+        
 
         if (maxSpeed * .65 < speed && SpeedCheck1 == false)
         {

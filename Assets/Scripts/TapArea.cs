@@ -14,8 +14,8 @@ public class TapArea : TapGameObject {
     public Material material1;
     public Material material2;
 
-    public Color red;
-    public Color grey;
+    Color red;
+    Color grey;
     public Renderer rend;
 
     float lerp;
@@ -99,6 +99,6 @@ public class TapArea : TapGameObject {
                 rend = this.GetComponent<Renderer>();
         red = material1.color;
         grey = material2.color;
-    transform.localScale = new Vector3(radius*2, radius*2, radius*2);
+        transform.localScale = new Vector3(radius*2, radius*2, radius*2);
 	}
 }
