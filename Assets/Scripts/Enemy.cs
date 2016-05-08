@@ -2,7 +2,7 @@
 using System.Collections;
 
 [RequireComponent(typeof(Rigidbody))]
-[RequireComponent(typeof(Animator))]
+//[RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(Collider))]
 public class Enemy : TapGameObject {
 
@@ -15,6 +15,7 @@ public class Enemy : TapGameObject {
 
     AudioSource popSound;
     Animator animator;
+    AnimEnemy animEnemy;
     Collider collider;
     Rigidbody rigidbody;
     GameManager gameManager;
@@ -26,10 +27,13 @@ public class Enemy : TapGameObject {
     // The initial target of our enemy, passed by the enemyspawner
     // This is only used as the initial velocity at spawn and 
     // should not be null when spawning is done.
-    public Transform target;
+    public void SetTarget (Transform targ) {
+        animEnemy.target = targ;
+    }
+
     // If the enemy is in the game area (ready from spawning)
     // TODO check for this in TapArea
-    public bool doneSpawning { get; private set; }
+    public bool doneSpawning { get; set; }
 
 
     bool rotateEnemy = false;
@@ -54,7 +58,7 @@ public class Enemy : TapGameObject {
             step = 0;
             rotateEnemy = true;
 
-            KittyDo kitty = GetComponent<KittyDo>();
+            //KittyDo kitty = GetComponent<KittyDo>();
             angularSpeed = (Vector3.AngleBetween(newdir, olddir) / jumpSpeed);
             //Debug.Log("new difference: " + dir);
         }
@@ -66,33 +70,22 @@ public class Enemy : TapGameObject {
         popSound = audioManager.GetAudioSource("PopSound");
         gameManager = GameManager.Instance();
         doneSpawning = false;
-        animator = GetComponent<Animator>();
+        //animator = GetComponentIn<Animator>();
         collider = GetComponent<Collider>();
         rigidbody = GetComponent<Rigidbody>();
         if (!gameManager)
             Debug.LogError("no gameManager found!");
         rigidbody.useGravity = false;
         transform.localScale = new Vector3(radius*2, radius*2, radius*2);
+        animEnemy = GetComponentInChildren<AnimEnemy>();
+        if (!animEnemy)
+            Debug.LogError("anim enemy not found!");
     }
 	// Use this for initialization
 	void Start () {
 	
 	}
 
-    /// <summary>
-    /// Called as an AnimationEvent by the AnimationClip at
-    /// the end of the Drop animation.
-    /// This sets the Enemy as initialized and starts its movement
-    /// </summary>
-    public void DoneSpawning ()
-    {
-        //Debug.Log("done spawning");
-        if (target == null) Debug.LogError("target was not initialzed when enemy spawned!");
-        Vector3 diff = target.position - transform.position;
-        diff = new Vector3(diff.x, 0, diff.z);                  // ignore the y axis
-        SetDirection((diff).normalized );
-        doneSpawning = true;
-    }
 	// Update is called once per frame
 	void FixedUpdate () {
         // Drop the enemy from the sky!
@@ -115,7 +108,7 @@ public class Enemy : TapGameObject {
     {
         base.OnEnable();
         speed = initialSpeed;
-        animator.Play("drop");
+        //animator.Play("drop");
     }
     protected void OnDisable()
     {

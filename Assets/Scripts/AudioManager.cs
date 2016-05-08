@@ -41,7 +41,7 @@ public class AudioManager : MonoBehaviour {
 
     public AudioSource GetAudioSource(string name)
     {
-        AudioSource a;
+        AudioSource a = null;
         if (audioSources == null)
             Debug.LogError("Audio sources null");
 
