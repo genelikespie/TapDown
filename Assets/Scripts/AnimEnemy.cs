@@ -9,9 +9,13 @@ public class AnimEnemy : MonoBehaviour {
 
     public Transform target;
     public Enemy enemy;
+    Animator animator;
     void Awake()
     {
         enemy = GetComponentInParent<Enemy>();
+        animator = GetComponent<Animator>();
+        if (!animator || !enemy)
+            Debug.LogError("animator not found!");
     }
     /// <summary>
     /// Called as an AnimationEvent by the AnimationClip at
@@ -26,5 +30,10 @@ public class AnimEnemy : MonoBehaviour {
         diff = new Vector3(diff.x, 0, diff.z);                  // ignore the y axis
         enemy.SetDirection((diff).normalized);
         enemy.doneSpawning = true;
+    }
+
+    public void Jump()
+    {
+        animator.Play("jump");
     }
 }

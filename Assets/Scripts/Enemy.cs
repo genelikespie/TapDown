@@ -38,7 +38,7 @@ public class Enemy : TapGameObject {
 
     bool rotateEnemy = false;
     float angularSpeed = 1f;
-    float jumpSpeed = 0.667f;
+    float jumpSpeed = 1f;
     Vector3 newdir;
     Vector3 olddir;
     float step;                     // current angle we've rotated to
@@ -60,6 +60,7 @@ public class Enemy : TapGameObject {
 
             //KittyDo kitty = GetComponent<KittyDo>();
             angularSpeed = (Vector3.AngleBetween(newdir, olddir) / jumpSpeed);
+            animEnemy.Jump();
             //Debug.Log("new difference: " + dir);
         }
 
