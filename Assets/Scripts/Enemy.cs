@@ -21,7 +21,7 @@ public class Enemy : TapGameObject {
     GameManager gameManager;
 
     const float initialSpeed = 5f;
-    const float maxSpeed = 15f;
+    protected const float maxSpeed = 15f;
 
     public float speed { get; private set; }
     // The initial target of our enemy, passed by the enemyspawner
@@ -65,7 +65,7 @@ public class Enemy : TapGameObject {
 
     }
 
-    void Awake () {
+    protected void Awake () {
         AudioManager audioManager = AudioManager.Instance();
         popSound = audioManager.GetAudioSource("PopSound");
         gameManager = GameManager.Instance();
@@ -87,7 +87,7 @@ public class Enemy : TapGameObject {
 	}
 
 	// Update is called once per frame
-	void FixedUpdate () {
+	protected void FixedUpdate () {
         // Drop the enemy from the sky!
         if (rotateEnemy)
         {

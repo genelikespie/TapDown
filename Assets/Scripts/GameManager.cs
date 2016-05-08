@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour {
     const int tapAreaPoolAmount = 160;
     const int catParticlePoolAmount = 80;
 
-    const int maxHealth = 3;
+    private int maxHealth = 3;
     int health;
     public static bool godMode = false;
 
@@ -65,6 +65,7 @@ public class GameManager : MonoBehaviour {
         if (enemyPrefab == null || tapAreaPrefab == null || tapPointPrefab == null || enemySpawnerPrefab == null || !catParticlePrefab)
             Debug.LogError("prefab loading failed!");
     }
+
     void Start()
     {
         enemyPool = TapGOPoolSingleton<Enemy>.CreatePool(enemyPrefab, enemyPoolAmount);
@@ -91,6 +92,10 @@ public class GameManager : MonoBehaviour {
         if (!enemySpawner) Debug.LogError("creation of enemy spawner failed!");
 
         carActivate.GetComponent<AllCars>().callingAllcars();
+    }
+    public void SetDifficulty(int diff)
+    {
+        maxHealth = diff;
     }
 
     public void StopGame()
