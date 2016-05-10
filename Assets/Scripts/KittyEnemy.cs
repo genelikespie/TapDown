@@ -13,7 +13,7 @@ public class KittyEnemy : Enemy {
     void Awake()
     {
         base.Awake();
-        ColorChange = transform.Find("scaleWrapper/default");
+        ColorChange = transform.Find("animWrapper/default");
         BaseColor = ColorChange.GetComponent<Renderer>().material.color;
     }
 
