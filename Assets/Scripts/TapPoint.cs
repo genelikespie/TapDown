@@ -6,7 +6,6 @@ using System.Collections;
  */
 public class TapPoint : MonoBehaviour {
 
-    Renderer TempRend;
     // The height that tap areas are set to
     const float tapAreaHeight = 2.1f;
 
@@ -43,16 +42,7 @@ public class TapPoint : MonoBehaviour {
                 //Debug.Log(hit.transform.tag);
                 // make sure the the ray hit the ground, if not, then the tap doesn't count
                 if (hit.transform.tag != "Ground")
-                {
-                    //make sure it has a renderer and that its not red already
-                    TempRend = hit.transform.GetComponent<Renderer>();
-                    if (TempRend != null && TempRend.material.color != Color.red)
-                    {
-                        hit.transform.GetComponent<RedColor>().SwitchColor();
-                    }
                     return;
-
-                }
                 tapPos = hit.point;
                 tapPos = new Vector3(tapPos.x, tapAreaHeight, tapPos.z);
                 // check if our tap position is within the range of any currently active tap areas
@@ -85,5 +75,4 @@ public class TapPoint : MonoBehaviour {
             tapAreaSound.Play();
         }
 	}
-
 }

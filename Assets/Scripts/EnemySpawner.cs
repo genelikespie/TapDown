@@ -52,7 +52,7 @@ public class EnemySpawner : MonoBehaviour {
         if (!enemy) Debug.LogError("enemy not found");
         enemy.transform.position = spawnPoints[i].position;
         enemy.transform.rotation = spawnPoints[i].rotation;
-        enemy.target = target;
+        enemy.SetTarget(target);
         enemy.gameObject.SetActive(true);
     }
 }
