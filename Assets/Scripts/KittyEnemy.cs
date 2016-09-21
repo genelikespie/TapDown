@@ -8,21 +8,11 @@ public class KittyEnemy : Enemy {
     bool SpeedCheck1 = false;
     bool SpeedCheck2 = false;
 
-	// Use this for initialization
-
     void Awake()
     {
         base.Awake();
         ColorChange = transform.Find("animWrapper/default");
         BaseColor = ColorChange.GetComponent<Renderer>().material.color;
-    }
-
-	void Start () {
-	}
-	
-	// Update is called once per frame
-	void Update () {
-
     }
 
     void FixedUpdate()
@@ -42,12 +32,6 @@ public class KittyEnemy : Enemy {
             ColorChange.GetComponent<Renderer>().material.color = Color.red;
         }
     }
-
-    void ChangeColor()
-    {
-
-    }
-
 
     //Reset the SpeedChecks so that it can go back to normal color
     //Set the cat back to its base color.

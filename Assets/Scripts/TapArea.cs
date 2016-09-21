@@ -8,19 +8,21 @@ using System.Collections;
 /// </summary>
 public class TapArea : TapGameObject {
 
-    public const float radius = 16f;
+    public const float radius = 17f;
 
-    //Material change functions
+    // Material change functions
     public Material material1;
     public Material material2;
-
+    public ParticleSystem sprayParticles;
+    // Colors for the fade effect.
     Color red;
     Color grey;
     public Renderer rend;
 
     float lerp;
 
-    //time functions to remove the TapArea
+    // Time functions to remove the TapArea
+    // TODO remove these in favor of a coroutine.
     public float timeLengthTapArea = 3f;
     public float timeLeftTapArea = 0f;
     bool alreadyActive = false;
@@ -35,13 +37,12 @@ public class TapArea : TapGameObject {
     void OnEnable()
     {
         // call our base class's method
-
         base.OnEnable();
 
-
         // Activate timer to kill Tap Area
-        alreadyActive = true;
-        MoveUp = true;
+        StartCoroutine(fadeArea());
+
+        // For all enemies in the area, push them back.
         foreach (TapGameObject obj in activeEnemyPool.activeObjectList)
         {
             Vector3 difference = (obj.transform.position - transform.position);
@@ -56,17 +57,23 @@ public class TapArea : TapGameObject {
         }
     }
 
-    //Use to remove the tap area and make it disappear.
-    void FixedUpdate()
+    // Called when area is enabled.
+    // Plays the color changing animation and the grass particle effect.
+    private IEnumerator fadeArea()
     {
-        if (alreadyActive == true)
+        sprayParticles.Play();
+        alreadyActive = true;
+        MoveUp = true;
+
+        while (timeLengthTapArea > timeLeftTapArea)
         {
             timeLeftTapArea += Time.deltaTime;
-
             // this.rend.material.color = Color.Lerp(red, grey, timeLeftTapArea/timeLengthTapArea);
+            // Change the color from red to gray (don't lerp since we will get overlapping artifacts)
             if (timeLengthTapArea / 2 <= timeLeftTapArea)
             {
-                //if changing color from red -> gray
+                // If changing color from red -> gray, move the area up so it doesn't overlap
+                // otherwise, there will be visual artifacts in the overlapping areas.
                 if (MoveUp == true)
                 {
                     float moveY = (transform.position.y - .02f);
@@ -84,8 +91,42 @@ public class TapArea : TapGameObject {
                 this.gameObject.SetActive(false);
                 MoveUp = false;
             }
+            yield return null;
         }
+        yield return null;
     }
+
+    // Use to remove the tap area and make it disappear.
+    //void FixedUpdate()
+    //{
+    //    if (false)
+    //    //if (alreadyActive == true)
+    //    {
+    //        timeLeftTapArea += Time.deltaTime;
+    //
+    //        // this.rend.material.color = Color.Lerp(red, grey, timeLeftTapArea/timeLengthTapArea);
+    //        if (timeLengthTapArea / 2 <= timeLeftTapArea)
+    //        {
+    //            //if changing color from red -> gray
+    //            if (MoveUp == true)
+    //            {
+    //                float moveY = (transform.position.y - .02f);
+    //                transform.position = new Vector3(this.transform.position.x, moveY, this.transform.position.z);
+    //                this.gameObject.GetComponent<MeshRenderer>().material = material2;
+    //                MoveUp = false;
+    //            }
+    //        }
+    //        //reset and remove the TapArea
+    //        if (timeLengthTapArea <= timeLeftTapArea)
+    //        {
+    //            alreadyActive = false;
+    //            timeLeftTapArea = 0f;
+    //            rend.material = material1;
+    //            this.gameObject.SetActive(false);
+    //            MoveUp = false;
+    //        }
+    //    }
+    //}
 
 
 

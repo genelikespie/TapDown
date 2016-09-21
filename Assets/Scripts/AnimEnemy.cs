@@ -24,8 +24,11 @@ public class AnimEnemy : MonoBehaviour {
     /// </summary>
     public void DoneSpawning()
     {
-        //Debug.Log("done spawning");
-        if (target == null) Debug.LogError("target was not initialzed when enemy spawned!");
+        Debug.Log("done spawning");
+        if (target == null)
+        {
+            Debug.LogError("target was not initialzed when enemy spawned!");
+        }
         Vector3 diff = target.position - transform.position;
         diff = new Vector3(diff.x, 0, diff.z);                  // ignore the y axis
         enemy.SetDirection((diff).normalized);
@@ -34,6 +37,7 @@ public class AnimEnemy : MonoBehaviour {
 
     public void Jump()
     {
+        Debug.Log("enemy jumping");
         animator.Play("jump");
     }
 }

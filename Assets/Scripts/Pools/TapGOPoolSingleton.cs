@@ -59,7 +59,8 @@ public class TapGOPoolSingleton<Template> : MonoBehaviour where Template : TapGa
         }
         lock (_createlock)
         {
-            if (poolInstance == null && activePoolInstance == null) {
+            if (poolInstance == null && activePoolInstance == null)
+            {
                 // create a new instance of TapGOPool for our singleton
                 GameObject newinstance = new GameObject("TapGOPool");
                 newinstance.AddComponent<TapGOPool>();
@@ -70,9 +71,10 @@ public class TapGOPoolSingleton<Template> : MonoBehaviour where Template : TapGa
                 newactiveinstance.AddComponent<ActiveTapGOPool>();
                 activePoolInstance = newactiveinstance.GetComponent<ActiveTapGOPool>();
 
-
                 if (poolInstance == null || activePoolInstance == null)
+                {
                     Debug.LogError("Could not create poolInstance!");
+                }
             }
             else
             {

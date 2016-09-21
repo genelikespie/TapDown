@@ -2,16 +2,19 @@
 using System.Collections;
 using System.Collections.Generic;
 
+/// <summary>
+/// Handles the automated spawning of enemies.
+/// </summary>
 public class EnemySpawner : MonoBehaviour {
-
-
     ActiveTapGOPool activeEnemyPool;
     TapGOPool enemyPool;
-    public List<Transform> spawnPoints;
+
+    [SerializeField]
+    private List<Transform> spawnPoints;
 
     // placeholder for target transform, replace this with dynamic implementation
     public Transform target;
-    public float timeBetweenSpawns = 1f;
+    public float timeBetweenSpawns = 2.5f;
 
     float nexttime = 0;
     float currtime = 0;
@@ -25,6 +28,7 @@ public class EnemySpawner : MonoBehaviour {
         if (!activeEnemyPool || !enemyPool || !target)
             Debug.LogError("Cannot find activeEnemyPool!");
 
+        // Build the spawner list from child objects with the "spawner" tag
         foreach (Transform t in transform.GetComponentsInChildren<Transform>())
         {
             if (t.tag == "Spawner")

@@ -2,8 +2,6 @@
 using System.Collections;
 
 [RequireComponent(typeof(Rigidbody))]
-//[RequireComponent(typeof(Animator))]
-[RequireComponent(typeof(Collider))]
 public class Enemy : TapGameObject {
 
     // distance above from where the enemy spawns
@@ -19,6 +17,7 @@ public class Enemy : TapGameObject {
     Collider collider;
     Rigidbody rigidbody;
     GameManager gameManager;
+    TapGOPool catParticlePool;
 
     const float initialSpeed = 5f;
     protected const float maxSpeed = 15f;
@@ -35,14 +34,12 @@ public class Enemy : TapGameObject {
     // TODO check for this in TapArea
     public bool doneSpawning { get; set; }
 
-
     bool rotateEnemy = false;
     float angularSpeed = 1f;
     float jumpSpeed = 1f;
     Vector3 newdir;
     Vector3 olddir;
     float step;                     // current angle we've rotated to
-
 
     public void SetDirection(Vector3 dir)
     {
@@ -61,12 +58,11 @@ public class Enemy : TapGameObject {
             //KittyDo kitty = GetComponent<KittyDo>();
             angularSpeed = (Vector3.AngleBetween(newdir, olddir) / jumpSpeed);
             animEnemy.Jump();
-            //Debug.Log("new difference: " + dir);
         }
-
     }
 
-    protected void Awake () {
+    protected void Awake ()
+    {
         AudioManager audioManager = AudioManager.Instance();
         popSound = audioManager.GetAudioSource("PopSound");
         gameManager = GameManager.Instance();
@@ -75,17 +71,17 @@ public class Enemy : TapGameObject {
         collider = GetComponent<Collider>();
         rigidbody = GetComponent<Rigidbody>();
         if (!gameManager)
+        {
             Debug.LogError("no gameManager found!");
+        }
         rigidbody.useGravity = false;
         transform.localScale = new Vector3(radius*2, radius*2, radius*2);
         animEnemy = GetComponentInChildren<AnimEnemy>();
         if (!animEnemy)
+        {
             Debug.LogError("anim enemy not found!");
+        }
     }
-	// Use this for initialization
-	void Start () {
-	
-	}
 
 	// Update is called once per frame
 	protected void FixedUpdate () {
@@ -100,11 +96,10 @@ public class Enemy : TapGameObject {
             {
                 rigidbody.velocity = newdir * speed;
                 rotateEnemy = false;
-
             }
         }
-
 	}
+
     protected void OnEnable()
     {
         base.OnEnable();
@@ -116,7 +111,11 @@ public class Enemy : TapGameObject {
         if (doneSpawning)
         {
             rigidbody.velocity = Vector3.zero;
-            TapGameObject particle = gameManager.catParticlePool.GetObject();
+            if (catParticlePool == null)
+            {
+                catParticlePool = TapGOPoolSingleton<CatParticle>.PoolInstance();
+            }
+            TapGameObject particle = catParticlePool.GetObject();
             if (particle)
             {
                 particle.gameObject.SetActive(true);
@@ -131,8 +130,10 @@ public class Enemy : TapGameObject {
         base.OnDisable();
     }
 
-
-    void OnTriggerEnter(Collider other)
+    // Called by the OnTriggerEnter in EnemyCollider to handle collision behavior.
+    // Separate this from OnTriggerEnter so that we can put the 
+    // collider anywhere in the hierarchy.
+    public void CollideWithOther(Collider other)
     {
         if (other.gameObject.tag == "Base")
         {
@@ -144,7 +145,6 @@ public class Enemy : TapGameObject {
         {
             if (!rotateEnemy)
             {
-
                 Vector3 vVelocity = -(transform.forward);
                 Vector3 fVelocity = (other.transform.forward);
                 Vector3 endDirection = vVelocity - 2 * (Vector3.Dot(vVelocity, fVelocity)) * fVelocity;
@@ -154,12 +154,10 @@ public class Enemy : TapGameObject {
             }
         }
 
-
         if (other.gameObject.tag == "Killzone")
         {
             this.gameObject.SetActive(false);
         }
-
 
         //swtich the forward vectors on the colliding enemies
         if (other.gameObject.tag == "Enemy")
@@ -181,12 +179,8 @@ public class Enemy : TapGameObject {
                 otherVelocity = new Vector3(otherVelocity.x, 0, otherVelocity.z);
                 otherVelocity = otherVelocity.normalized;
                 other.GetComponent<Enemy>().SetDirection(otherVelocity);
-
             }
         }
-
-
-
     }
 
 }

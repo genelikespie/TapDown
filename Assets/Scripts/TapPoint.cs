@@ -2,7 +2,8 @@
 using System.Collections;
 
 /*
- * This is the object that keeps track of where the player taps 
+ * This is the object that keeps track of where the player taps
+ * Also handles spawning tap areas from the TapPool
  */
 public class TapPoint : MonoBehaviour {
     Renderer TempRend;
@@ -24,15 +25,7 @@ public class TapPoint : MonoBehaviour {
             Debug.LogError("Cannot find activeTapAreaPool!");
 	}
 	
-	// Update is called once per frame
 	void Update () {
-	    // TODO
-        // Get user input (tap on screen)
-        //   Check if we there is already a TapArea where the player tapped
-        //     if yes, ignore
-        //     else
-        //       spawn a new taparea (from the object pool)
-        //       register the taparea with activetapgameobjectpool
         if (Input.GetButtonDown("Fire1"))
         {
             RaycastHit hit;
@@ -69,7 +62,9 @@ public class TapPoint : MonoBehaviour {
                 }
             }
             else
+            {
                 return;
+            }
             // we are not in range of any tap areas
             // set a fresh tap area and make it appear on the place
             TapArea freshTapArea = tapAreaPool.GetObject().GetComponent<TapArea>();

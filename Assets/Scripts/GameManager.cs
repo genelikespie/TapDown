@@ -3,17 +3,19 @@ using System.Collections;
 
 public class GameManager : MonoBehaviour {
 
+    // Create the game object pools
     TapGOPool enemyPool;
     TapGOPool tapAreaPool;
-    public TapGOPool catParticlePool;
+    TapGOPool catParticlePool;
 
     TapPoint tapPoint;
-    EnemySpawner enemySpawner;
-    GameObject enemyPrefab;
-    GameObject tapAreaPrefab;
-    GameObject tapPointPrefab;
-    GameObject enemySpawnerPrefab;
-    GameObject catParticlePrefab;
+    public EnemySpawner enemySpawner;
+
+    public GameObject enemyPrefab;
+    public GameObject tapAreaPrefab;
+    public GameObject tapPointPrefab;
+    public GameObject enemySpawnerPrefab;
+    public GameObject catParticlePrefab;
 
     public int score {get; private set;}
     MainMenu mainMenu;
@@ -53,13 +55,7 @@ public class GameManager : MonoBehaviour {
 	// Use this for initialization
     void Awake()
     {
-        enemyPrefab = Resources.Load("enemyPrefab") as GameObject;
-        tapAreaPrefab = Resources.Load("tapAreaPrefab") as GameObject;
-        tapPointPrefab = Resources.Load("tapPointPrefab") as GameObject;
-        enemySpawnerPrefab = Resources.Load("enemySpawnerPrefab") as GameObject;
-        catParticlePrefab = Resources.Load("catParticlePrefab") as GameObject;
         carActivate = GameObject.Find("carholder");
-
         if (carActivate == null)
             Debug.LogError("Add carholder");
         if (enemyPrefab == null || tapAreaPrefab == null || tapPointPrefab == null || enemySpawnerPrefab == null || !catParticlePrefab)
@@ -85,11 +81,16 @@ public class GameManager : MonoBehaviour {
         health = maxHealth;
         mainMenu.SetHealthMeter(health);
         tapPoint = (Instantiate(tapPointPrefab) as GameObject).GetComponent<TapPoint>();
-        if (!tapPoint)
+        if (tapPoint == null)
+        {
             Debug.LogError("creation of tap point object failed!");
-
-        enemySpawner = (Instantiate(enemySpawnerPrefab) as GameObject).GetComponent<EnemySpawner>();
-        if (!enemySpawner) Debug.LogError("creation of enemy spawner failed!");
+        }
+        if (enemySpawner == null)
+        {
+            enemySpawner = (Instantiate(enemySpawnerPrefab) as GameObject).GetComponent<EnemySpawner>();
+            Debug.LogWarning("No enemy spawner found, creating one by default");
+        }
+        enemySpawner.gameObject.SetActive(true);
 
         carActivate.GetComponent<AllCars>().callingAllcars();
     }
@@ -112,9 +113,10 @@ public class GameManager : MonoBehaviour {
         }
         if (tapPoint)
             GameObject.Destroy(tapPoint.gameObject);
-        if(enemySpawner)
-            GameObject.Destroy(enemySpawner.gameObject);
-
+        if (enemySpawner != null)
+        {
+            enemySpawner.gameObject.SetActive(false);
+        }
     }
 
 	// Update is called once per frame
