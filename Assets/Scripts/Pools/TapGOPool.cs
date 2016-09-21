@@ -29,7 +29,7 @@ public class TapGOPool : MonoBehaviour
     {
         foreach (TapGameObject obj in objectList)
         {
-            if (obj.gameObject.activeSelf == false && !obj.taken)
+            if (obj != null && obj.gameObject.activeSelf == false && !obj.taken)
             {
                 obj.taken = true;
                 return obj;
